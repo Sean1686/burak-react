@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { Box, Container, Stack } from "@mui/system";
 import { NavLink } from "react-router-dom";
 
-export function HomeNavbar() {
+export default function HomeNavbar() {
     const authMember = null;
     return <div className="home-navbar">
         <Container className={"navbar-container"}>
