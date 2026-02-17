@@ -3,7 +3,7 @@ import { Box, Container, Stack } from "@mui/system";
 import { NavLink } from "react-router-dom";
 
 export function HomeNavbar() {
-    const authMember = true;
+    const authMember = null;
     return <div className="home-navbar">
         <Container className={"navbar-container"}>
             <Stack className="menu">
@@ -47,7 +47,25 @@ export function HomeNavbar() {
                         )}
                         </Stack>
             </Stack>
-            <Stack>Detail</Stack>
+            <Stack className="header-frame">
+             <Stack className="detail">
+                <Box className="head-main-txt">World's Most Delicious Cousine</Box>
+                <Box className="wel-txt">The Choice, not just a choice</Box>
+                <Box className="service-txt">24 hours service</Box>
+                <Box className="sign-up">
+                    {!authMember ? (
+                        <Button
+                         variant="contained"
+                         className="sign-up-button"
+                         >Sign Up</Button>
+                         ) : null}
+                </Box>
+             </Stack>
+             <Stack className="logo-frame">
+                <div className="logo-img"></div>
+             </Stack>
+
+            </Stack>
         </Container>
     </div>
 }
