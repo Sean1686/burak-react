@@ -30,14 +30,13 @@ export default function ActiveUsers() {
                                         <AspectRatio ratio="1">
                                             <img src={ele.imagePath} alt="" />
                                         </AspectRatio>
-
-                                    <Box className="user-detail">
+                                        <Box className="user-detail">
                                             <Stack flexDirection={"row"}>
                                                 <Typography className={"titles"}>
                                                     {ele.memberNick}
                                                 </Typography>
                                             </Stack>
-                                    </Box>
+                                         </Box>
                                 </Card>
                             )
                         }) 
