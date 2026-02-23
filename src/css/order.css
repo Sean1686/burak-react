@@ -1,0 +1,13 @@
+.order-page {
+    width: 100%;
+    height: auto;
+    background: #f8f8ff;
+    display: flex;
+}
+
+.order-page .oder-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+}
