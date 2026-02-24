@@ -1,37 +1,51 @@
-import React from "react";
-import { Box, Stack } from "@mui/material";
-import Button from "@mui/material/Button";
-import TabPanel from "@mui/lab/TabPanel";
+import { TabPanel } from "@mui/lab";
+import { Box, Button, Stack } from "@mui/material";
 
-export default function FinishedOrders() {
-  return (
-    <TabPanel value="1">
-      <Stack>
-        {[1,2].map((ele, index) =>  {
-            return (
+export default function FinishedOrders () {
+     return (
+        <TabPanel value="3">
+             <Stack>
+        {[1, 2, ].map((ele, index) => {
+          return (
+            <Box key={index} className={"order-main-box"}>
               <Box className={"order-box-scroll"}>
-                {[1,2,3].map((ele2, index2) => {
+                {[1, 2].map((ele2, index2) => {
                   return (
                     <Box key={index2} className={"orders-name-price"}>
-                      <img 
-                      src={"/img/lavash.webp"}
-                      className={"order-dish-img"} 
+                        <Box className="img-name">
+                      <img
+                        src={"/img/lavash.webp"}
+                        className={"order-dish-img"}
                       />
                       <p className={"title-dish"}>Lavash</p>
-                      <Box>
+                       </Box>
+                      <Box className={"price-box"}>
                         <p>$9</p>
                         <img src={"/icons/close.svg"} />
                         <p>2</p>
-                        <img src="/icons/pause.svg" />
-                        <p style={{marginLeft: "15px"}}>$24</p>
+                        <img src={"/icons/pause.svg"} />
+                        <p style={{ marginLeft: "15px" }}>$24</p>
                       </Box>
                     </Box>
                   );
                 })}
               </Box>
-            )
+              <Box  justifyContent={'center'} className='proceed'>
+                <Box  className='calc'>
+                <p className="pricing">Product price</p>
+                <p>$60</p>
+                <img src="/icons/plus.svg" alt="" />
+                <p>Delivery cost</p>
+                <p>$5</p>
+                <img src="/icons/pause.svg" alt="" />
+                <p>Total</p>
+                <p>$20</p>
+                </Box>
+ </Box>
+            </Box>
+          );
         })}
       </Stack>
-    </TabPanel>
-  )
+        </TabPanel>
+     )
 }
