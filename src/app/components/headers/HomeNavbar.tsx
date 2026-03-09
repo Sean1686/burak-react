@@ -1,9 +1,16 @@
 import { Button } from "@mui/material";
 import { Box, Container, Stack } from "@mui/system";
 import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
 
 export default function HomeNavbar() {
     const authMember = null;
+    const [count, setCount] = useState(0);
+
+    const buttonHandler = () => {
+        setCount(count +1)
+    }
+
     return <div className="home-navbar">
         <Container className={"navbar-container"}>
             <Stack className="menu">
@@ -51,12 +58,13 @@ export default function HomeNavbar() {
              <Stack className="detail">
                 <Box className="head-main-txt">World's Most Delicious Cousine</Box>
                 <Box className="wel-txt">The Choice, not just a choice</Box>
-                <Box className="service-txt">24 hours service</Box>
+                <Box className="service-txt">{count} hours service</Box>
                 <Box className="sign-up">
                     {!authMember ? (
                         <Button
                          variant="contained"
                          className="sign-up-button"
+                         onClick={() => buttonHandler()}
                          >Sign Up</Button>
                          ) : null}
                 </Box>

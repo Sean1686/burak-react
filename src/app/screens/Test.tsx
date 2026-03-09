@@ -32,7 +32,8 @@ componentWillUnmount() {
     // runs before component unmount
 }
 
-componentDidUpdate() {}
+componentDidUpdate() {};
+
     render() {
         return(
             <div>
