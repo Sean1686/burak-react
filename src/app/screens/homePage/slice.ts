@@ -26,4 +26,7 @@ const homePageSlice = createSlice({
 });
 
 export const {setPopularDishes, setNewDishes, setTopUsers} =
- homePageSlice.actions
+ homePageSlice.actions;
+
+ const HomePageReducers = homePageSlice.reducer;
+ export default HomePageReducers;
