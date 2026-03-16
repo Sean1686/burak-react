@@ -8,15 +8,36 @@ import PaginationItem from "@mui/material/PaginationItem";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { MonetizationOn } from "@mui/icons-material";
+import { Product } from "../../../lib/types/product";
+import { Member } from "../../../lib/types/member";
+
+import { useDispatch } from "react-redux";
+import { Dispatch } from "react";
+import { setProducts } from "./slice";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { retrieveProducts } from "./selector";
+
+/** REDUX SLICE & SELECTOR */
+// @ts-ignore
+const actionDispacht = (dispatch: Dispatch) => ({
+  setProducts: (data: Product[]) => dispatch(setProducts(data))
+});
+
+/** REDUX SLICE & SELECTOR */
+// @ts-ignore
+const productsRetriever = createSelector(  
+  retrieveProducts,
+  (products) => ({ products })
+);
 
 const products = [
-    { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
     { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-    { productName: "Kebab", imagePath: "/img/kebab.webp" },
-    { productName: "Lavash", imagePath: "/img/lavash.webp" },
-    { productName: "Lavash", imagePath: "/img/lavash.webp" },
-    { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-    { productName: "Kebab", imagePath: "/img/kebab.webp" },
+    { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
+    { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
+    { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
+    { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
+    { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
     { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
 ];
 
