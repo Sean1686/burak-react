@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Stack, Box } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -18,11 +18,15 @@ import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { retrieveChosenPorduct, retrieveRestaurant } from "./selector";
 import { Product } from "../../../lib/types/product";
+import { Member } from "../../../lib/types/member";
+import { useParams } from "react-router-dom";
+import ProductService from "../../services/ProductService";
+import MemberService from "../../services/MemberService";
 
 /** REDUX SLICE & SELECTOR */
 // @ts-ignore
 const actionDispacht = (dispatch: Dispatch) => ({
-  setRestaurant: (data: Product[]) => dispatch(setProducts(data)),
+  setRestaurant: (data: Member[]) => dispatch(setProducts(data)),
   setChosenProduct: (data: Product[]) => dispatch(setChosenProduct(data))
 
 });
@@ -40,6 +44,27 @@ const restaurantRetriever = createSelector(
 );
 
 export default function ChosenProduct() {
+   const {productId} = useParams<{productId: string}>();
+   
+
+
+  const { setRestaurant, setChosenProduct } = actionDispacht(useDispatch());
+
+  const {chosenProduct} = useSelector(chosenProductRetriever);
+  const {restaurant} = useSelector(restaurantRetriever);
+
+  useEffect(() => {
+    const product = new ProductService();
+    product.getProducts(productId)
+    .then((data) => setChosenProduct(data))
+    .catch((error) => console.log(error));
+
+    const member = new MemberService();
+    member.getRestaurant()
+    .then((data) => setRestaurant(data))
+    .catch((error) => console.log(error));
+  }, []);
+  if(!chosenProduct) return null;
   return (
     <div className={"chosen-product"}>
       <Box className={"title"}>Product Detail</Box>

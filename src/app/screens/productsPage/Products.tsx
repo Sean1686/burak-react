@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box, Button, Container, Stack } from "@mui/material";
 import SearchIcon from "@mui/icons-material/MonetizationOn";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -8,7 +8,7 @@ import PaginationItem from "@mui/material/PaginationItem";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { MonetizationOn } from "@mui/icons-material";
-import { Product } from "../../../lib/types/product";
+import { Product, ProductInquiry } from "../../../lib/types/product";
 import { Member } from "../../../lib/types/member";
 
 import { useDispatch } from "react-redux";
@@ -20,6 +20,7 @@ import { retrieveProducts } from "./selector";
 import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
 import { sereverAPI } from "../../../lib/config";
+import { useHistory } from "react-router-dom";
 
 /** REDUX SLICE & SELECTOR */
 // @ts-ignore
@@ -35,21 +36,57 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
 
 
 export default function Products() {
-    const { setProducts } = actionDispacht(useDispatch())
-    const {products} = useSelector(productsRetriever)
+    const {setProducts} = actionDispacht(useDispatch());
+  const {products} = useSelector(productsRetriever);
+  const [productSearch, setProductSearch] = useState<ProductInquiry>({
+      page: 1,
+      limit: 8,
+      order: "createdAt",
+      productCollection: ProductCollection.DISH,
+      search: "",
+    });
+    const [searchText, setSearchText] = useState<string>(""); 
+    const history = useHistory();
+
   useEffect(() => {
-    const products = new ProductService();
-    products
-      .getProducts({
-        page: 1,
-        limit: 8,
-        order: "createdAt",
-        productCollection: ProductCollection.DISH,
-        search: "",
-      })
-      .then((data) => setProducts(data))
-      .catch((err) => console.log(err));
-  }, []);
+    const product = new ProductService();
+    product.getProducts(productSearch)
+    .then((data) => setProducts(data))
+    .catch((err) => console.log(err));
+  }, [productSearch]);
+
+  useEffect(() => {
+    if(searchText === ""){
+      productSearch.search = "";
+      setProductSearch({...productSearch});
+    }
+  }, [searchText]);
+
+  const searchCollectionHandler = (collection: ProductCollection) => {
+    productSearch.page = 1;
+    productSearch.productCollection = collection;
+    setProductSearch({ ...productSearch });
+  };
+
+    const searchOrderHandler = (order: string) => {
+    productSearch.page = 1;
+    productSearch.order = order;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchProductHandler = () => {
+    productSearch.search = searchText;
+    setProductSearch({...productSearch});
+  };
+
+  const paginationHandler = (e: ChangeEvent<any>, value: number) => {
+    productSearch.page = value;
+    setProductSearch({...productSearch});
+  };
+
+  const chooseDishHandler = (id: string) => {
+    history.push(`/products/${id}`);
+  }
 
   return (
     <div className={"products"}>
@@ -63,6 +100,13 @@ export default function Products() {
                 className="single-search-input"
                 name="singleResearch"
                 placeholder="Type here"
+                 onChange={(e) => {
+          setSearchText(e.target.value);
+        }}
+        value={searchText}
+        onKeyDown={(e) => {
+          if(e.key === "Enter") searchProductHandler();
+        }}
               />
               <button className="single-button-search">
                 SEARCH
