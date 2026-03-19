@@ -5,7 +5,7 @@ import ProductsPage from "."
 const initialState: ProductsPageState = {
     restaurant: null,
     chosenProduct: null,
-    products: []
+    products: [],
 }
 
 const productsPageSlice = createSlice({

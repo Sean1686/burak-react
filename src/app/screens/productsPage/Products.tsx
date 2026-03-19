@@ -32,32 +32,38 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
   products,
 }));
 
-
 export default function Products() {
-    const {setProducts} = actionDispacht(useDispatch());
-  const {products} = useSelector(productsRetriever);
+  const { setProducts } = actionDispacht(useDispatch());
+  const { products } = useSelector(productsRetriever);
   const [productSearch, setProductSearch] = useState<ProductInquiry>({
-      page: 1,
-      limit: 8,
-      order: "createdAt",
-      productCollection: ProductCollection.DISH,
-      search: ""
-  })
+    page: 1,
+    limit: 8,
+    order: "createdAt",
+    productCollection: ProductCollection.DISH,
+    search: "",
+  });
 
-  const [searchText, setSearchText] = useState<string>("")
+  const [searchText, setSearchText] = useState<string>("");
   const history = useHistory();
 
   useEffect(() => {
     const product = new ProductService();
-    product.getProducts(productSearch)
-    .then((data) => setProducts(data))
-    .catch((err) => console.log(err));
+    product
+      .getProducts(productSearch)
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          setProducts([]);
+        }
+      })
+      .catch((err) => console.log(err));
   }, [productSearch]);
 
   useEffect(() => {
-    if(searchText === "") {
+    if (searchText === "") {
       productSearch.search = "";
-      setProductSearch({ ...productSearch })
+      setProductSearch({ ...productSearch });
     }
   }, [searchText]);
 
@@ -65,28 +71,28 @@ export default function Products() {
   const searchCollectionHandler = (collection: ProductCollection) => {
     productSearch.page = 1;
     productSearch.productCollection = collection;
-    setProductSearch({...productSearch})
-  }; 
+    setProductSearch({ ...productSearch });
+  };
 
-    const searchOrderHandler = (order: string) => {
+  const searchOrderHandler = (order: string) => {
     productSearch.page = 1;
     productSearch.order = order;
-    setProductSearch({...productSearch})
+    setProductSearch({ ...productSearch });
   };
 
   const searchProductHandler = () => {
-    productSearch.search = searchText,
-    setProductSearch({...productSearch})
+    productSearch.search = searchText;
+    setProductSearch({ ...productSearch });
   };
 
   const paginationHandler = (e: ChangeEvent<any>, value: number) => {
     productSearch.page = value;
-      setProductSearch({...productSearch})
-  }
+    setProductSearch({ ...productSearch });
+  };
 
   const chooseDishHandler = (id: string) => {
-    history.push(`/products/${id}`)
-  }
+    history.push(`/products/${id}`);
+  };
 
   return (
     <div className={"products"}>
@@ -103,12 +109,12 @@ export default function Products() {
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 onKeyDown={(e) => {
-                  if(e.key === "Enter") searchProductHandler();
+                  if (e.key === "Enter") searchProductHandler();
                 }}
               />
-              <button 
-              className="single-button-search"
-              onClick={searchProductHandler}
+              <button
+                className="single-button-search"
+                onClick={searchProductHandler}
               >
                 SEARCH
                 <span>
@@ -133,7 +139,9 @@ export default function Products() {
             <Stack className={"dishes-filter-box"}>
               <Button
                 variant={"contained"}
-                color={productSearch.order === "createdAt" ? "primary" : "secondary"}
+                color={
+                  productSearch.order === "createdAt" ? "primary" : "secondary"
+                }
                 className={"order"}
                 onClick={() => searchOrderHandler("createdAt")}
               >
@@ -142,7 +150,11 @@ export default function Products() {
               <Button
                 variant={"contained"}
                 className={"order"}
-                color={productSearch.order === "productPrice" ? "primary" : "secondary"}
+                color={
+                  productSearch.order === "productPrice"
+                    ? "primary"
+                    : "secondary"
+                }
                 onClick={() => searchOrderHandler("productPrice")}
               >
                 Price
@@ -150,7 +162,11 @@ export default function Products() {
               <Button
                 variant={"contained"}
                 className={"order"}
-                color={productSearch.order === "productViews" ? "primary" : "secondary"}
+                color={
+                  productSearch.order === "productViews"
+                    ? "primary"
+                    : "secondary"
+                }
                 onClick={() => searchOrderHandler("productViews")}
               >
                 Views
@@ -161,54 +177,68 @@ export default function Products() {
           <Stack className={"list-category-section"}>
             <Stack className={"product-category"}>
               <div className={"category-main"}>
-                <Button 
-                variant={"contained"} 
-                color={
-                  productSearch.productCollection === ProductCollection.OTHER 
-                  ? "primary" 
-                  : "secondary"
-                }
-                onClick={() => searchCollectionHandler(ProductCollection.OTHER)}
+                <Button
+                  variant={"contained"}
+                  color={
+                    productSearch.productCollection === ProductCollection.OTHER
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() =>
+                    searchCollectionHandler(ProductCollection.OTHER)
+                  }
                 >
                   Other
                 </Button>
-                <Button variant={"contained"} color={
-                  productSearch.productCollection === ProductCollection.DESERT 
-                  ? "primary" 
-                  : "secondary"
-                }
-                  onClick={() => searchCollectionHandler(ProductCollection.DESERT)}
-
+                <Button
+                  variant={"contained"}
+                  color={
+                    productSearch.productCollection === ProductCollection.DESERT
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() =>
+                    searchCollectionHandler(ProductCollection.DESERT)
+                  }
                 >
                   Dessert
                 </Button>
-                <Button variant={"contained"} color={
-                  productSearch.productCollection === ProductCollection.DRINK 
-                  ? "primary" 
-                  : "secondary"
-                }
-                  onClick={() => searchCollectionHandler(ProductCollection.DRINK)}
-
+                <Button
+                  variant={"contained"}
+                  color={
+                    productSearch.productCollection === ProductCollection.DRINK
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() =>
+                    searchCollectionHandler(ProductCollection.DRINK)
+                  }
                 >
                   Drink
                 </Button>
-                <Button variant={"contained"} color={
-                  productSearch.productCollection === ProductCollection.SALAD 
-                  ? "primary" 
-                  : "secondary"
-                }
-                  onClick={() => searchCollectionHandler(ProductCollection.SALAD)}
-
+                <Button
+                  variant={"contained"}
+                  color={
+                    productSearch.productCollection === ProductCollection.SALAD
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() =>
+                    searchCollectionHandler(ProductCollection.SALAD)
+                  }
                 >
                   Salad
                 </Button>
-                <Button variant={"contained"} color={
-                  productSearch.productCollection === ProductCollection.DISH 
-                  ? "primary" 
-                  : "secondary"
-                }
-                  onClick={() => searchCollectionHandler(ProductCollection.DISH)}
-
+                <Button
+                  variant={"contained"}
+                  color={
+                    productSearch.productCollection === ProductCollection.DISH
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() =>
+                    searchCollectionHandler(ProductCollection.DISH)
+                  }
                 >
                   Dish
                 </Button>
@@ -216,15 +246,22 @@ export default function Products() {
             </Stack>
 
             <Stack className={"product-wrapper"}>
-              {products.length !== 0 ? (
-                products.map((product: Product) => {
-                    const imagePath = `${sereverAPI}/${product.productImages[0]}`;
-                    const sizeVolume = product.productCollection 
-                    === ProductCollection.DRINK 
-                    ? product.productVolume + "litre" 
-                    : product.productSize + "size"
+              {Array.isArray(products) ? (
+  products.length > 0 ? (
+    products.map((product: Product) => {
+                  const imagePath = product.productImages?.[0]
+                    ? `${sereverAPI}/${product.productImages[0]}`
+                    : "/img/default.png";
+                  const sizeVolume =
+                    product.productCollection === ProductCollection.DRINK
+                      ? product.productVolume + "litre"
+                      : product.productSize + "size";
                   return (
-                    <Stack key={product._id} className={"product-card"} onClick={() => chooseDishHandler(product._id)}>
+                    <Stack
+                      key={product._id}
+                      className={"product-card"}
+                      onClick={() => chooseDishHandler(product._id)}
+                    >
                       <Stack
                         className={"product-img"}
                         sx={{ backgroundImage: `url(${imagePath})` }}
@@ -237,7 +274,10 @@ export default function Products() {
                           />
                         </Button>
                         <Button className={"view-btn"} sx={{ right: "36px" }}>
-                          <Badge badgeContent={product.productViews} color="secondary">
+                          <Badge
+                            badgeContent={product.productViews}
+                            color="secondary"
+                          >
                             <RemoveRedEyeIcon
                               sx={{
                                 color: product.productViews ? "gray" : "white",
@@ -260,16 +300,20 @@ export default function Products() {
                 })
               ) : (
                 <Box className="no-data">Products are not available!</Box>
+              )
+              ) : (
+                <Box className="no-data">Products are not available!</Box>
               )}
+            
             </Stack>
           </Stack>
 
           <Stack className={"pagination-section"}>
             <Pagination
               count={
-                products.length !== 0 
-                ? productSearch.page + 1 
-                : productSearch.page  
+                products.length !== 0
+                  ? productSearch.page + 1
+                  : productSearch.page
               }
               page={productSearch.page}
               renderItem={(item) => (
@@ -325,7 +369,9 @@ export default function Products() {
     </div>
   );
 }
-function dispatch(arg0: { payload: any; type: "productsPage/setProducts"; }): any {
-    throw new Error("Function not implemented.");
+function dispatch(arg0: {
+  payload: any;
+  type: "productsPage/setProducts";
+}): any {
+  throw new Error("Function not implemented.");
 }
-
