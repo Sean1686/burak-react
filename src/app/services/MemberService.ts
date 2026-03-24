@@ -12,7 +12,7 @@ class MemberService {
     public async getTopUsers(): Promise<Member[]> {
         try {
             const url = this.path + "/member/top-users";
-            const result = await axios.post(url);
+            const result = await axios.get(url);
 
             return result.data;
         } catch (error) {
@@ -63,6 +63,23 @@ class MemberService {
             return member;
         } catch(err) {
             console.log("Error, login", err);
+            throw err;
+        }
+    }
+
+    public async logout(): Promise<void> {
+        try{
+            const url = this.path + "/member/logout";
+            const result = await axios.post(url, {}, {withCredentials: true});
+            console.log("Error, logout:", result);
+
+            const member: Member = result.data.member;
+            console.log("member:", member);
+            localStorage.removeItem("memberData");
+
+            return result.data.logout;
+        } catch(err) {
+            console.log("Error, logout", err);
             throw err;
         }
     }

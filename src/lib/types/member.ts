@@ -1,6 +1,7 @@
 import { MemberStatus, Membertype } from "../enums/member.enum";
 
 export interface Member {
+    authMember: any;
     _id: string;
     memberType: Membertype;
     memberNick: string;
