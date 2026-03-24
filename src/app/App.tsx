@@ -19,10 +19,10 @@ import AuthenticationModal from "./components/auth";
  function App() {
   const location = useLocation();
   const { cartItems, onAdd,  onRemove, onDelete, onDeleteAll } = useBasket();
-  const [ signupOpen, setsignupOpen] = useState<boolean>(false);
+  const [ signupOpen, setSignupOpen] = useState<boolean>(false);
     const [ loginOpen, setLoginOpen] = useState<boolean>(false);
 
-  const  handleSingupClose = () => setsignupOpen(false);
+  const  handleSingupClose = () => setSignupOpen(false);
   const  handleLoginClose = () => setLoginOpen(false)
 
 
@@ -33,12 +33,18 @@ import AuthenticationModal from "./components/auth";
         onAdd={onAdd}
         onRemove={onRemove} 
         onDelete={onDelete} 
-        onDeleteAll={onDeleteAll} /> 
+        onDeleteAll={onDeleteAll} 
+         setSignupOpen={setSignupOpen}
+         setLoginOpen={setLoginOpen}
+         /> 
         : <OtherNavbar cartItems={cartItems} 
         onAdd={onAdd}
         onRemove={onRemove} 
         onDelete={onDelete} 
-        onDeleteAll={onDeleteAll} />
+        onDeleteAll={onDeleteAll}
+        setSignupOpen={setSignupOpen}
+         setLoginOpen={setLoginOpen}
+        />
         }
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
