@@ -19,7 +19,7 @@ class OrderService {
                     productId: cartItem._id
                 }
             });
-            const url = this.path + "/order/create";
+           const url = `${this.path}/order/create`;
             const result = await axios.post(url, orderItems, {withCredentials: true});
             console.log("createOrder:", result);
 
