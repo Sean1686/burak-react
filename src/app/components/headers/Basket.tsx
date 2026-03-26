@@ -11,6 +11,7 @@ import { CartItem } from "../../../lib/types/search";
 import { Messages, sereverAPI } from "../../../lib/config";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import OrderService from "../../services/OrderService";
+import { useGlobals } from "../../hooks/useGlobal";
 
 interface BasketProps {
   cartItems: CartItem[];
@@ -22,11 +23,13 @@ interface BasketProps {
 
 export default function Basket(props: BasketProps) {
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
-  const authMember = null;
+  const { authMember, setOrderBuilder } = useGlobals();
   const history = useHistory();
-  const itemsPrice: number = cartItems.reduce((a: number, c: CartItem) => 
-    a + c.quantity * c.price, 0 );
-  const shippingCost: number = itemsPrice < 100 ? 5 : 0; 
+  const itemsPrice: number = cartItems.reduce(
+    (a: number, c: CartItem) => a + c.quantity * c.price,
+    0,
+  );
+  const shippingCost: number = itemsPrice < 100 ? 5 : 0;
   const totalPrice = (itemsPrice + shippingCost).toFixed(1);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -40,22 +43,21 @@ export default function Basket(props: BasketProps) {
     setAnchorEl(null);
   };
 
-  const proceedOrderHandler = async() => {
+  const proceedOrderHandler = async () => {
     try {
       handleClose();
-      if(!authMember) throw new Error(Messages.error2);
+      if (!authMember) throw new Error(Messages.error2);
       const order = new OrderService();
       await order.createeOrder(cartItems);
 
       onDeleteAll();
-
-      history.push("/orders")
-
+      setOrderBuilder(new Date());
+      history.push("/orders");
     } catch (err) {
       console.log(err);
       sweetErrorHandling(err).then();
     }
-  }
+  };
 
   return (
     <Box className={"hover-line"}>
@@ -114,7 +116,7 @@ export default function Basket(props: BasketProps) {
               <Stack flexDirection={"row"}>
                 <div>Cart Products:</div>
                 <DeleteForever
-                sx={{ ml: "5px", cursor: "pointer" }}
+                  sx={{ ml: "5px", cursor: "pointer" }}
                   color={"primary"}
                   onClick={() => onDeleteAll()}
                 />
@@ -158,21 +160,22 @@ export default function Basket(props: BasketProps) {
               })}
             </Box>
           </Box>
-            {cartItems.length !== 0 ? (
-              <Box className={"basket-order"}>
-               <span className={"price"}>Total: ${totalPrice} ({itemsPrice} + {shippingCost})</span>
-            <Button 
-            onClick={proceedOrderHandler}
-            startIcon={<ShoppingCartIcon />} 
-            variant={"contained"}
-            >
-              Order
-            </Button>
-          </Box>
-            ) : (
-              ""
-            )}
-           
+          {cartItems.length !== 0 ? (
+            <Box className={"basket-order"}>
+              <span className={"price"}>
+                Total: ${totalPrice} ({itemsPrice} + {shippingCost})
+              </span>
+              <Button
+                onClick={proceedOrderHandler}
+                startIcon={<ShoppingCartIcon />}
+                variant={"contained"}
+              >
+                Order
+              </Button>
+            </Box>
+          ) : (
+            ""
+          )}
         </Stack>
       </Menu>
     </Box>
