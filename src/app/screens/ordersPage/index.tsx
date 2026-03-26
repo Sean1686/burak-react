@@ -35,7 +35,7 @@ const actionDispacht = (dispatch: Dispatch) => ({
 
 export default function OrdersPage() {
   const dispatch = useDispatch();
-  const { setPausedOrders, setProcessOrders, setFinishedOrder } =
+  const { setPausedOrders, setProcessOrders, setFinishedOrders } =
     actionDispacht(dispatch);
   const [value, setValue] = useState("1");
   const [orderInquiry, setzOrderInquiry] = useState<OrderInquiry>({
