@@ -4,11 +4,13 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Menu from "@mui/material/Menu";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { DeleteForever } from "@mui/icons-material";
+import { DeleteForever, Message } from "@mui/icons-material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
-import { sereverAPI } from "../../../lib/config";
+import { Messages, sereverAPI } from "../../../lib/config";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import OrderService from "../../services/OrderService";
 
 interface BasketProps {
   cartItems: CartItem[];
@@ -37,6 +39,23 @@ export default function Basket(props: BasketProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const proceedOrderHandler = async() => {
+    try {
+      handleClose();
+      if(!authMember) throw new Error(Messages.error2);
+      const order = new OrderService();
+      await order.createeOrder(cartItems);
+
+      onDeleteAll();
+
+      history.push("/orders")
+
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
+    }
+  }
 
   return (
     <Box className={"hover-line"}>
@@ -142,7 +161,11 @@ export default function Basket(props: BasketProps) {
             {cartItems.length !== 0 ? (
               <Box className={"basket-order"}>
                <span className={"price"}>Total: ${totalPrice} ({itemsPrice} + {shippingCost})</span>
-            <Button startIcon={<ShoppingCartIcon />} variant={"contained"}>
+            <Button 
+            onClick={proceedOrderHandler}
+            startIcon={<ShoppingCartIcon />} 
+            variant={"contained"}
+            >
               Order
             </Button>
           </Box>
