@@ -99,18 +99,15 @@ export default function ProcessOrders(props: ProcessOrders) {
                 </Box>
 
                 <p> 23-11-04 03:05 </p>
-                <Button
-                  sx={{
-                    background: "#3A87CB",
-                    color: "white",
-                    width: "138px",
-                    height: "36px",
-                    whiteSpace: "nowrap",
-                    borderRadius: "10px",
-                  }}
-                >
+                 <Button 
+                 value={order._id}  
+                 sx={{background:'#3A87CB', 
+                 color:'white', width:'138px', 
+                 height:'36px',whiteSpace:'nowrap', 
+                 borderRadius:'10px'}} onClick={finishOrderHandler}
+                 >
                   VERIFY TO FULFIL
-                </Button>
+                 </Button>
               </Box>
             </Box>
           );
