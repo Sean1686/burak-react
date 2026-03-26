@@ -2,19 +2,22 @@ import { Box } from "@mui/material";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import Button from "@mui/material/Button";
 import { sweetErrorHandling, sweetTopSmallSuccessAlert } from "../../../lib/sweetAlert";
-import { Messages } from "../../../lib/config";
+import { Messages, sereverAPI } from "../../../lib/config";
 import { T } from "../../../lib/types/common";
 import MemberService from "../../services/MemberService";
+import { useGlobals } from "../../hooks/useGlobal";
+import { MemberUpdateInput } from "../../../lib/types/member";
+import { useState } from "react";
 
 export function Settings() {
    const {authMember, setAuthMember} = useGlobals();
-  const [image, setImage] = useState<string>(authMember?.memberImage ? `${serverApi}/${authMember.memberImage}` : "icons/default-user.svg" )
+  const [image, setImage] = useState<string>(authMember?.memberImage ? `${sereverAPI}/${authMember.memberImage}` : "icons/default-user.svg" )
   const [memberUpdateInput, setMemberUpdateInput] = 
   useState<MemberUpdateInput>({
     memberNick: authMember?.memberNick,
     memberPhone: authMember?.memberPhone,
     memberAddress: authMember?.memberAddress,
-    memberDesc: authMember?.memberDesc,
+    memberDescription: authMember?.memberDescription,
     memberImage: authMember?.memberImage
   });
 
@@ -32,7 +35,7 @@ export function Settings() {
     setMemberUpdateInput({ ...memberUpdateInput });
   }
   const memberDescHandler = (e: T) => {
-    memberUpdateInput.memberDesc = e.target.value;
+    memberUpdateInput.memberDescription = e.target.value;
     setMemberUpdateInput({ ...memberUpdateInput });
   }
   const handleSubmitButton = async () => {
@@ -42,7 +45,7 @@ export function Settings() {
          memberUpdateInput.memberNick === "" ||  
          memberUpdateInput.memberPhone === "" || 
          memberUpdateInput.memberAddress === "" || 
-         memberUpdateInput.memberDesc === ""   
+         memberUpdateInput.memberDescription === ""   
       ) {
         throw new Error(Messages.error3);
       }
@@ -130,8 +133,8 @@ export function Settings() {
           <label className={"spec-label"}>Description</label>
           <textarea
             className={"spec-textarea mb-description"}
-           placeholder={authMember?.memberDesc ?? "no description"}
-            value={memberUpdateInput.memberDesc}
+           placeholder={authMember?.memberDescription ?? "no description"}
+            value={memberUpdateInput.memberDescription}
             name="memberDesc"
              onChange={memberDescHandler}
           />

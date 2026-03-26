@@ -10,6 +10,7 @@ import { useGlobals } from "../../hooks/useGlobal";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrderService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { T } from "../../../lib/types/common";
 
 const processOrdersRetriever = createSelector(
   retrieveProcessOrders,
